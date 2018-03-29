@@ -20,7 +20,7 @@ Class Cell {
     }
 
     # Method to change state to $true/$false:Alive/Dead
-    ChangeState([bool]$state) {
+    [void]ChangeState([bool]$state) {
         $this.isAlive = [bool]$state
     }
 
