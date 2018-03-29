@@ -24,6 +24,14 @@ Class Cell {
         $this.isAlive = [bool]$state
     }
 
+    [void]AddNeighbor() {
+        $this.neighbors++
+    }
+
+    [void]ClearNeighbors() {
+        $this.neighbors = 0
+    }
+
     [string]ToString() {
         If ($this.isAlive) {
             return 'x'
@@ -145,56 +153,56 @@ Class Life {
 
         For ($row=0; $row -lt $this.size; $row++) {
             For ($col=0; $col -lt $this.size; $col++) {
-                $this.GameBoard.board[$row,$col].neighbors = 0
+                $this.GameBoard.board[$row,$col].ClearNeighbors()
 
                 # Check the old board. Set neighbor counts and Alive/Dead state on primary GameBoard object
 
                 # Up & left
                 If ($row -gt 0 -and $col -gt 0) {
                     If ($old_board.board[($row-1),($col-1)].isAlive) { # Seems dangerous, potential index out-of-bounds, but hasn't been an issue...
-                        $this.GameBoard.board[$row,$col].neighbors++
+                        $this.GameBoard.board[$row,$col].AddNeighbor()
                     }
                 }
                 # Up & right
                 If ($row -gt 0 -and $col -lt $this.size - 1) {
                     If ($old_board.board[($row-1),($col+1)].isAlive) {
-                        $this.GameBoard.board[$row,$col].neighbors++
+                        $this.GameBoard.board[$row,$col].AddNeighbor()
                     }
                 }
                 # Down & left
                 If ($row -lt $this.size - 1 -and $col -gt 0) {
                     If ($old_board.board[($row+1),($col-1)].isAlive) {
-                        $this.GameBoard.board[$row,$col].neighbors++
+                        $this.GameBoard.board[$row,$col].AddNeighbor()
                     }
                 }
                 # Down & right
                 If ($row -lt $this.size - 1 -and $col -lt $this.size - 1) {
                     If ($old_board.board[($row+1),($col+1)].isAlive) {
-                        $this.GameBoard.board[$row,$col].neighbors++
+                        $this.GameBoard.board[$row,$col].AddNeighbor()
                     }
                 }
                 # Left
                 If ($col -gt 0) {
                     If ($old_board.board[($row),($col-1)].isAlive) {
-                        $this.GameBoard.board[$row,$col].neighbors++
+                        $this.GameBoard.board[$row,$col].AddNeighbor()
                     }
                 }
                 # Right
                 If ($col -lt $this.size - 1) {
                     If ($old_board.board[($row),($col+1)].isAlive) {
-                        $this.GameBoard.board[$row,$col].neighbors++
+                        $this.GameBoard.board[$row,$col].AddNeighbor()
                     }
                 }
                 # Up
                 If ($row -gt 0) {
                     If ($old_board.board[($row-1),($col)].isAlive) {
-                        $this.GameBoard.board[$row,$col].neighbors++
+                        $this.GameBoard.board[$row,$col].AddNeighbor()
                     }
                 }
                 # Down
                 If ($row -lt $this.size - 1) {
                     If ($old_board.board[($row+1),($col)].isAlive) {
-                        $this.GameBoard.board[$row,$col].neighbors++
+                        $this.GameBoard.board[$row,$col].AddNeighbor()
                     }
                 }
 
