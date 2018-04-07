@@ -56,10 +56,29 @@ Class GameBoard {
                 $this.board[$row,$col] += [Cell]::new($false)
             }
         }
+    }
 
+    [void]Initialize() {
         # Create an initial pattern, minimum 3x3. Oscillates.
         ForEach ($row in 0..2) {
             $this.board[$row,1].ChangeState($true)
+        }
+    }
+
+    [void]Initialize([string]$mode) {
+        If ($mode.ToLower() -eq 'random') {
+            Write-Verbose "Randomizing board"
+            For ($row=0; $row -lt $this.size; $row++) {
+                For ($col=0; $col -lt $this.size; $col++) {
+                    If (Get-Random 2) {
+                        $state = $true    
+                    } Else {
+                        $state = $false
+                    }
+
+                    $this.board[$row,$col].ChangeState($state)
+                }
+            }
         }
     }
 
@@ -137,6 +156,7 @@ Class Life {
         Write-Verbose "Starting game loop..."
 
         $this.GameBoard = [GameBoard]::new($this.size)
+        $this.GameBoard.Initialize('random')
 
         For ($generation=0; $generation -lt $this.iterations; $generation++) {
             $this.currentGeneration = $generation
@@ -249,8 +269,8 @@ Class Life {
     }
 }
 
-#$game = [Life]::new(50) # Large size values are very slow to render!!
+#$game = [Life]::new(50)
 
 #$game2 = [Life]::new(4,5)
 
-$game3 = [Life]::new(3,10,0)
+$game3 = [Life]::new(25,100,600)
