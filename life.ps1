@@ -65,13 +65,16 @@ Class GameBoard {
 
     # Print board to screen
     [void]Display([int]$delay) {
+        $output = $null
+
         For ($row=0; $row -lt $this.size; $row++) {
             For ($col=0; $col -lt $this.size; $col++) {
-                Write-Host -NoNewLine $this.board[$row,$col]
+                $output += $this.board[$row,$col].ToString()
             }
-            Write-Host
+            $output += "`n"
         }
-        Write-Host
+
+        Write-Host $output
         Start-Sleep -m $delay
     }
 
