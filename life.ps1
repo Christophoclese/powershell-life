@@ -6,9 +6,21 @@ Inputs: square grid size, number of iterations, delay between iterations (in mil
 
 #>
 
-[cmdletbinding()]
+[CmdletBinding(PositionalBinding=$False)]
 
-Param()
+Param(
+    [Parameter(HelpMessage='Square size of grid.')]
+    [ValidateScript({$_ -gt 0})]
+    [int]$Size = 10,
+    
+    [Parameter(HelpMessage='Number of iterations.')]
+    [ValidateScript({$_ -gt 0})]
+    [int]$Iterations = 10,
+    
+    [Parameter(HelpMessage='Delay in milliseconds between generations.')]
+    [ValidateScript({$_ -gt 0})]
+    [int]$Delay = 400
+)
 
 Class Cell {
     [bool]$isAlive
@@ -19,9 +31,12 @@ Class Cell {
         $this.ChangeState($state)
     }
 
-    # Method to change state to $true/$false:Alive/Dead
+    [void]ChangeState() {
+        $this.isAlive = -not $this.isAlive
+    }
+
     [void]ChangeState([bool]$state) {
-        $this.isAlive = [bool]$state
+        $this.isAlive = $state
     }
 
     [void]AddNeighbor() {
@@ -116,31 +131,11 @@ Class GameBoard {
 }
 
 Class Life {
-    [int]$size = 10
-    [int]$iterations = 10
-    [int]$delay = 400
+    [int]$size = $null
+    [int]$iterations = $null
+    [int]$delay = $null
     [int]$currentGeneration = $null
     [GameBoard]$GameBoard
-
-    Life() {
-        Write-Verbose "Creating new Life object with defaults"
-        $this.runGame()
-    }
-
-    # Constructor, takes size
-    Life([int]$s) {
-        Write-Verbose "Creating new Life object"
-        $this.size = $s
-        $this.runGame()
-    }
-
-    # Constructor, takes size, iterations
-    Life([int]$s,[int]$i) {
-        Write-Verbose "Creating new Life object"
-        $this.size = $s
-        $this.iterations = $i
-        $this.runGame()
-    }
 
     # Constructor, takes size, iterations, delay
     Life([int]$s,[int]$i,[int]$d) {
@@ -269,8 +264,4 @@ Class Life {
     }
 }
 
-#$game = [Life]::new(50)
-
-#$game2 = [Life]::new(4,5)
-
-$game3 = [Life]::new(25,100,600)
+[Life]::new($Size,$Iterations,$Delay)
